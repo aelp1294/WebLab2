@@ -11,10 +11,10 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
     /* revisar si el id existe, si si existe devolver el contenido del id*/
     if(teams.find(item => item.id == req.params.id) != null){
-
         res.status(200).json(teams.find(item => item.id == req.params.id))
     }
     else{
+        Console.log("404 manejado")
         res.status(404).end()
     }    
 });
@@ -27,6 +27,7 @@ router.post('/', (req,res,next)=> {
         teams.push(body)
         res.status(201).end()   
     } else {
+        Console.log("404 manejado")
         res.status(404).end()
     }
 })
@@ -46,18 +47,21 @@ router.put('/:id', (req, res, next) => {
         res.status(204).end()
     }
     else{
+        Console.log("404 manejado")
         res.status(404).end()
     }
 })
 
 /* funcion delete para eliminar un item */
 router.delete('/:id', (req, res, next) => {
+    /* tratar de encontrar primero el id en la lista de items */
     if(teams.find(item => item.id == req.params.id) != null){
         var i = teams.indexOf(object)
         teams.splice(i, 1)
         res.status(204).end()
     }
     else{
+        Console.log("404 manejado")
         res.status(404).end()
     }   
 })
