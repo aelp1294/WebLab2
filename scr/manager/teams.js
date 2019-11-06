@@ -46,13 +46,16 @@ const GetUniqueItem = async (req, res, next) => {
 
 /* funcion post para insertar un nuevo item */
 const AddNewItem = (req,res,next) => {
-    const {body} = req
+    console.log("add backend");
+    const {body} = req 
+    body.id = 99999;
+    console.log(body.id);
     teams.find({}, (err, team) =>{
         if(team.length == 0){
             if(body.id != null && body.id > 0 && body.nombre != "" && body.liga != "" && body.campeonatos > 0 && body.puntos >= 0 && body.escudo != ""){
                 // create a new user
                 var newTeam = teams({
-                    id: body.id,
+                    id: 1,
                     liga: body.liga,
                     nombre: body.nombre,
                     campeonatos: body.campeonatos,
@@ -71,25 +74,29 @@ const AddNewItem = (req,res,next) => {
             /*insertar unicamente si el id y el nombre no se repiten*/
             }
         } else if((team.find(item => item.id == body.id) == null) && (team.find(item => item.nombre == body.nombre) == null) && body.id != null && body.id > 0 && body.nombre != "" && body.liga != "" && body.campeonatos > 0 && body.puntos >= 0 && body.escudo != ""){
-            // create a new user
-            var newTeam = teams({
-                id: body.id,
-                liga: body.liga,
-                nombre: body.nombre,
-                campeonatos: body.campeonatos,
-                puntos: body.puntos,
-                escudo: body.escudo
-            });
-            newTeam.save(function(err){
-                if(err){
-                    res.status(404)
-                    res.send("404 manejado")
-                } else {
-                    res.status(201)
-                    res.send("agregado") 
-                }
-            });
-    
+            
+            teams.findOne({}).sort({id:-1}).limit(1).exec((err, team) =>{
+                body.id = team.id + 1;
+                console.log(body.id);
+                // create a new user
+                var newTeam = teams({
+                    id: body.id,
+                    liga: body.liga,
+                    nombre: body.nombre,
+                    campeonatos: body.campeonatos,
+                    puntos: body.puntos,
+                    escudo: body.escudo
+                });
+                newTeam.save(function(err){
+                    if(err){
+                        res.status(404)
+                        res.send("404 manejado")
+                    } else {
+                        res.status(201)
+                        res.send("agregado") 
+                    }
+                });
+            });       
         }
     })
 };
