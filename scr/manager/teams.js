@@ -22,6 +22,7 @@ const GetUniqueItem = (req, res, next) => {
 /* funcion post para insertar un nuevo item */
 const AddNewItem = (req,res,next) => {
     const {body} = req
+    console.log("adding in backend")
     /*insertar unicamente si el id y el nombre no se repiten*/
     if((teams.find(item => item.id == body.id) == null) && (teams.find(item => item.nombre == body.nombre) == null) && body.id != null && body.id > 0 && body.nombre != "" && body.liga != "" && body.campeonatos > 0 && body.puntos >= 0 && body.escudo != ""){
         teams.push(body)
