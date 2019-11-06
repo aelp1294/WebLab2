@@ -3,11 +3,19 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+//DB
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var teamsRouter = require('./scr/router/teams');
 
+var cors = require('cors')
+
+
 var app = express();
+app.use(cors())
+//For MongoDB
+mongoose.connect('mongodb://localhost:27017/teamsDB');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
