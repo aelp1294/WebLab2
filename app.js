@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 //DB
 var mongoose = require('mongoose');
+var config = require('config');
+
+const dbConfig = config.get('mongodb.dbConfig');
 
 var indexRouter = require('./routes/index');
 var teamsRouter = require('./scr/router/teams');
@@ -15,7 +18,7 @@ var cors = require('cors')
 var app = express();
 app.use(cors())
 //For MongoDB
-mongoose.connect('mongodb://proyectomongo.westus.azurecontainer.io:27017/teamsDB');
+mongoose.connect('mongodb://'+dbConfig.host+'teamsDB');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

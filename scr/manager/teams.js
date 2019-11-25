@@ -2,9 +2,12 @@
 var teams = require('../../connectionToDB');
 //Redis
 var redis = require('redis');
-var client = redis.createClient({host: "proyectoredis.westus.azurecontainer.io", port: 6379});
 
+var config = require('../../config');
+const dbConfig = config.get('redis.dbConfig');
+var client = redis.createClient({host: dbConfig.host, port: 6379});
 var serviceActive
+
 client.on('connect', function() {
     console.log('connected');
     serviceActive = true;
