@@ -1,0 +1,15 @@
+{
+    "mongodb": {
+        "dbConfig": {
+            "host": "proyectomongo.westus.azurecontainer.io",
+            "port": 27017,
+            "dbName": "db_cerveza"
+        }
+    },
+    "redis": {
+        "dbConfig": {
+            "host": "proyectoredis.westus.azurecontainer.io",
+            "port": 6379
+        }
+    }
+}

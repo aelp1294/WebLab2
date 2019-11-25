@@ -15,7 +15,7 @@ var cors = require('cors')
 var app = express();
 app.use(cors())
 //For MongoDB
-mongoose.connect('mongodb://localhost:27017/teamsDB');
+mongoose.connect('mongodb://proyectomongo.westus.azurecontainer.io:27017/teamsDB');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

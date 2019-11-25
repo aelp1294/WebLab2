@@ -2,31 +2,45 @@
 var teams = require('../../connectionToDB');
 //Redis
 var redis = require('redis');
-var client = redis.createClient();
+var client = redis.createClient({host: "proyectoredis.westus.azurecontainer.io", port: 6379});
 
+var serviceActive
 client.on('connect', function() {
     console.log('connected');
+    serviceActive = true;
+});
+client.on('error', function(err) {
+    console.log('Failed to connect to redis service: '+ err);
+    serviceActive = false;
 });
 
 /* funcion get cuando no hay un id */
 const GetAllItems = async (req, res, next) => {
-    client.exists('team', function(err,reply){
-        if(reply == true){
-            client.get('team', function(err, reply) {      
-                res.status(200)
-                res.json(JSON.parse(reply))
-            });
-        } else{
-            teams.find({}, (err,team) => {
-                client.set('team', JSON.stringify(team));
-                client.expire('team', 180);
+    if(serviceActive){
+        client.exists('team', function(err,reply){
+            if(reply == true){
                 client.get('team', function(err, reply) {      
                     res.status(200)
                     res.json(JSON.parse(reply))
                 });
-            });
-        }
-    });
+            } else{
+                teams.find({}, (err,team) => {
+                    client.set('team', JSON.stringify(team));
+                    client.expire('team', 180);
+                    client.get('team', function(err, reply) {      
+                        res.status(200)
+                        res.json(JSON.parse(reply))
+                    });
+                });
+            }
+        });
+    } else {
+        teams.find({}, function(err, team) {      
+            res.status(200)
+            res.json(team)
+        });
+    }
+
 
 };
 
@@ -142,10 +156,12 @@ const DeleteItem = (req, res, next) => {
                     res.status(404)
                     res.send("404 manejado")
                 } else {
-                    teams.find({}, (err,team) => {
-                        client.set('team', JSON.stringify(team));
-                        client.expire('team', 180);
-                    });
+                    if(serviceActive){
+                        teams.find({}, (err,team) => {
+                            client.set('team', JSON.stringify(team));
+                            client.expire('team', 180);
+                        });
+                    }
                     res.status(204)
                     res.send("borrado")
                 }
