@@ -1,0 +1,15 @@
+{
+    "mongodb": {
+        "dbConfig": {
+            "host": "localhost",
+            "port": 27017,
+            "dbName": "teamsDB"
+        }
+    },
+    "redis": {
+        "dbConfig": {
+            "host": "localhost",
+            "port": 6379
+        }
+    }
+}
