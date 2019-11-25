@@ -60,6 +60,7 @@ const GetUniqueItem = async (req, res, next) => {
 
 /* funcion post para insertar un nuevo item */
 const AddNewItem = (req,res,next) => {
+
     console.log("add backend");
     const {body} = req 
     body.id = 99999;
